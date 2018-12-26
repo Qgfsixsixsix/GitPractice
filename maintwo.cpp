@@ -109,14 +109,71 @@ BOOL DecodeIcmpResponse(char * pBuf, int iPacketSize, DECODE_RESULT &DecodeResul
     }
     return true;
 }
+
+//获取输入IP地址的的最后一个字段
+//return int 
+int getIp(char Address[]){
+	StringBuffer sb = "";
+	int count = 1;
+	int i;
+	int len = strlen(Address);
+	for(i = 0; i < len; i++){
+		if(Address[i] == '.'){
+			count++;
+		}
+		sb += Address[i];
+		
+	}
+	int ip = 0;
+	for( ; i < len; i++){
+		ip = ip * 10 + (Address[i] - '0')
+	}
+	return ip;
+}
+
+//将IP的int 转换成String 
+String intToString(int v){
+	StringStream s;
+	s << v;
+	String str = s.str();
+	return str;
+}
+
+//将String 转换成char[]
+char* change(String ipdata){
+	char *dst = new char[255];
+	int i;
+	for(i = 0; i <= ipdata.length(); i++){
+		dst[i] = ipdata[i];
+		dst[i] = '\0';
+	return dst;
+}
+
 int main()
 {
     //初始化 Windows sockets 网络环境
     WSADATA wsa;
     WSAStartup(MAKEWORD(2,2), &wsa);
     char IpAddress[255];
-    cout << "请输入一个 IP 地址或域名：";
-    cin >> IpAddress;
+	char IpAddress_A[255];
+	char IpAddress_B[255];
+	cout << "例如：10.0.0.0 ~ 10.0.0.255"
+    cout << "请输入一个开始IP地址：";
+	cin >> IpAddress_A;
+	cout << "请输入一个结束IP地址：";
+	cin >> IpAddress_B;
+	
+	//求出开始IP的地址的最后一个字段的整数
+	int start = getIp(IpAddress_A);
+	StringBuffer finalBuffer = sb;
+	
+	//求出结束IP的地址的最后一个字段的整数
+	int end = getIp(IpAddress_B);
+	
+	//循环求出每个IP地址是否在线
+	for(int i = start; i <= end; i++){
+		IpAddress = change(String.valueOf(sb + intToString(i)));
+		
     //得到 IP 地址
     u_long ulDestIP = inet_addr(IpAddress);
     //转换不成功时按域名解析
@@ -224,5 +281,6 @@ int main()
         }
         iTTL++; //递增 TTL 值
     }
+	}
     return 0;
 }
